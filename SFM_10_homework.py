@@ -120,9 +120,11 @@ def from_date(start_date):
         dict["Temp Min"] = obs[0]
         dict["Temp Avg"] = obs[1]
         dict["Temp Max"] = obs[2]
+        dict["Start Date"] = start_date
         calc_temps.append(dict)
-
+   
     return jsonify(calc_temps)
+   
 
 @app.route("/api/v1.0/<start_date>/<end_date>")
 def from_to_date(start_date, end_date):
@@ -136,9 +138,13 @@ def from_to_date(start_date, end_date):
         dict["Temp Min"] = obs[0]
         dict["Temp Avg"] = obs[1]
         dict["Temp Max"] = obs[2]
+        dict["Start Date"] = start_date
+        dict["End Date"] = end_date
         calc_temps.append(dict)
+    
+    return jsonify(calc_temps) 
 
-    return jsonify(calc_temps)
+
 if __name__ == "__main__":
     app.run(debug=True)
 
