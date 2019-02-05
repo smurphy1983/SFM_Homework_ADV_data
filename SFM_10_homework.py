@@ -28,13 +28,11 @@ def welcome():
         f"Available Routes:<br/>"
         f"Precipitation Information: /api/v1.0/precipitation<br/>"
         f"Station Information: /api/v1.0/stations<br/>"
-        f"Temperature Information: /api/v1.0/tobs<br/>"
-        f"Information from a specific date: /api/v1.0/Insert Date as YYYY-MM-DD<br/>"
-        f"Information for a specific date range /api/v1.0/Insert Start Date as YYYY-MM-DD/Insert End Date as YYYY-MM-DD"
+        f"Temp information: /api/v1.0/tobs<br/>"
+        f"Temp information from a specific date: /api/v1.0/Insert Date as YYYY-MM-DD<br/>"
+        f"Temp information for a specific date range: /api/v1.0/Insert Start Date as YYYY-MM-DD/Insert End Date as YYYY-MM-DD<br/>"
+        
     )
-
-
-
 
 
 @app.route("/api/v1.0/precipitation")
@@ -89,9 +87,9 @@ def tempertature():
     for date in last_date:
         sep_date=date.split('-') 
 
-    year=int(sep_date[0]); 
-    month=int(sep_date[1]); 
-    day=int(sep_date[2]);
+    year=int(sep_date[0])
+    month=int(sep_date[1])
+    day=int(sep_date[2])
     first_date = dt.date(year, month, day) - dt.timedelta(days=365)
     
     temp_year = session.query(Measurement.date, Measurement.tobs).\
@@ -124,9 +122,11 @@ def from_date(start_date):
         calc_temps.append(dict)
    
     return jsonify(calc_temps)
+
+
    
 
-@app.route("/api/v1.0/<start_date>/<end_date>")
+@app.route("/api/v1.0/avgtemp/<start_date>/<end_date>")
 def from_to_date(start_date, end_date):
     
     from_date = session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).\
@@ -143,6 +143,7 @@ def from_to_date(start_date, end_date):
         calc_temps.append(dict)
     
     return jsonify(calc_temps) 
+
 
 
 if __name__ == "__main__":
